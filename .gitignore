@@ -1,0 +1,6 @@
+venv
+archive
+.idea
+config.yml
+cookies.pkl
+__pycache__/
