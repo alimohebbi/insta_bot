@@ -4,3 +4,4 @@ archive
 config.yml
 cookies.pkl
 __pycache__/
+users.json

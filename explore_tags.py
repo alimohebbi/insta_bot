@@ -1,7 +1,10 @@
+import json
 import random
+from pathlib import Path
 from time import sleep
 import yaml
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from yaml.loader import SafeLoader
 
 # Open the file and load the file
@@ -18,6 +21,22 @@ class Stats:
     likes = 0
     comments = 0
     follow = 0
+    reached_users = set()
+
+    @classmethod
+    def load_reached_users(cls):
+        if Path('users.json').is_file():
+            with open('users.json', 'r') as user_files:
+                Stats.reached_users = set(json.load(user_files))
+
+    @classmethod
+    def add_user_id(cls, user):
+        if user in Stats.reached_users:
+            return False
+        Stats.reached_users.add(user)
+        with open('users.json', 'w') as outfile:
+            json.dump(list(Stats.reached_users), outfile)
+        return True
 
     @classmethod
     def print_stats(cls):
@@ -25,6 +44,7 @@ class Stats:
 
 
 def explore_tags(driver: webdriver.Chrome, tag_list, comment_list):
+    Stats.load_reached_users()
     sleep(2)
     for tag_i in range(len(tag_list)):
         tag = random.choice(tag_list)
@@ -36,12 +56,18 @@ def explore_tags(driver: webdriver.Chrome, tag_list, comment_list):
         Stats.print_stats()
 
 
+def add_insta_id(driver):
+    element = driver.find_element(By.XPATH, xpath_dict['user_id'])
+    return Stats.add_user_id(element.text)
+
+
 def iterate_tag_posts(comment_list, driver, tag):
     driver.get(f'https://www.instagram.com/explore/tags/{tag}/')
     sleep(5)
     click(driver, xpath_dict['first_media'])
     for page in range(random.randint(1, config['max_next_limit'])):
-        post_operations(comment_list, driver)
+        if(add_insta_id(driver)):
+            post_operations(comment_list, driver)
         click(driver, xpath_dict['next_button'])
 
 

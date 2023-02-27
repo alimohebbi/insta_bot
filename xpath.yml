@@ -12,4 +12,5 @@ comment_area: '//textarea[@aria-label="Add a comment…"]'
 post_button:  '//div[div[contains(text(),"Post")]]'
 follow_button : '//div[contains(text(),"Follow")]'
 next_button : '//button/div/span/*[@aria-label="Next"]'
+user_id: '//article/div/div[2]/div/div/div[1]/div/header/div[2]/div[1]/div[1]/div/div/div/div/div/a'
 
