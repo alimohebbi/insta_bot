@@ -16,7 +16,7 @@ with open('config.yml') as f:
 
 def setup_driver():
     chrome_options = Options()
-    chrome_options.add_argument("--headless")
+    # chrome_options.add_argument("--headless")
     driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
     driver.get("https://www.instagram.com")
     return driver
